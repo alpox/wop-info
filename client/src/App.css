@@ -1,0 +1,160 @@
+@import url("https://fonts.googleapis.com/css?family=Lato");
+
+body {
+  background-image: url("paper.png");
+  font-family: "Lato";
+  padding: 0 10px;
+}
+
+h1 {
+  font-size: 1.3rem;
+}
+
+.header {
+  background-color: #3366ff;
+  height: 50px;
+  padding: 10px 20px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0px 3px 10px #666;
+  margin: 0 -10px;
+}
+
+.logo {
+  max-width: 100%;
+  height: 50px;
+}
+
+.app-title {
+  font-size: 1.5em;
+  display: inline;
+  line-height: 50px;
+  margin: 0;
+  text-shadow: 2px 2px 5px #000;
+}
+
+.row {
+  display: grid;
+  background-color: #eee;
+  margin: 10px auto;
+  padding: 10px 16px;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 2px 3px 10px 1px #666;
+  max-width: 900px;
+}
+
+.server-title {
+  position: relative;
+  color: rgba(0, 0, 0, 0.8);
+  margin: -10px -16px;
+  margin-bottom: 10px;
+  text-align: center;
+  text-shadow: 1px 1px 1px #333;
+}
+
+.server-title::after {
+  content: " ";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.2);
+  width: 80%;
+  bottom: 0;
+}
+
+.informations {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+}
+
+.server-info {
+  padding: 16px;
+  font-size: 1.2rem;
+}
+
+.server-info .info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.server-info .info .key {
+  font-weight: bold;
+}
+
+.players-info {
+  padding: 16px;
+  margin-right: 40px;
+}
+
+.players-info .info.title {
+  display: grid;
+  color: rgba(0, 0, 0, 0.7);
+  grid-template-columns: 1fr 1fr 1fr;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.players-info .info.title .name {
+  text-shadow: none;
+}
+
+.players-info .info {
+  display: grid;
+  color: rgba(0, 0, 0, 0.7);
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 8px 0;
+}
+
+.players-info .info > div:not(:first-child) {
+  text-align: center;
+}
+
+.players-info .info .name {
+  text-shadow: 1px 1px 1px #000;
+}
+
+.black {
+  color: black;
+}
+
+.red {
+  color: rgb(255, 0, 0);
+}
+
+.green {
+  color: rgb(0, 255, 0);
+}
+
+.blue {
+  color: rgb(0, 0, 255);
+}
+
+.cyan {
+  color: rgb(0, 255, 255);
+}
+
+.magenta {
+  color: rgb(255, 0, 255);
+}
+
+.white {
+  color: white;
+}
+
+.yellow {
+  color: rgb(255, 255, 0);
+}
+
+@media screen and (max-width: 724px) {
+  .informations {
+    grid-template-columns: 1fr;
+  }
+
+  .players-info {
+    margin: 0;
+  }
+}
