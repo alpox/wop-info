@@ -110,14 +110,12 @@ class Client {
         response.readFromBuffer(buffer);
         if (!waitForEOT || response.ended) {
           this.connection.close();
-          this.connection.off("message", onMessage);
           resolve(response.getBuffer());
         }
       };
 
       const onError = err => {
         this.connection.close();
-        this.connection.off("error", onError);
         reject(err);
       };
 
