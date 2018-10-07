@@ -9,6 +9,8 @@ const cache = new ServerInfoCache(5000);
 
 let numClients = 0;
 
+let addresses = {};
+
 cache.on('updated', serverInfo => {
     io.sockets.emit('updated', serverInfo);
 });
@@ -18,13 +20,17 @@ io.on('connection', socket => {
 
     socket.emit('updated', cache.getServerInfo());
 
+    const address = socket.handshake.address;
+
     numClients++;
+    addresses[address.address] = address;
 
     cache.startUpdating();
 
     socket.on('disconnect', () => {
         console.log('a user disconnected');
         numClients--;
+        delete addresses[address.address];
 
         if (!numClients) cache.stopUpdating();
     });
@@ -36,7 +42,10 @@ app.get('/', (req, res) => {
 });
 
 app.get('/users', (req, res) => {
-    res.json(numClients);
+    res.json({
+        numClients,
+        addresses
+    });
 });
 
 server.listen(process.env.PORT, function() {
