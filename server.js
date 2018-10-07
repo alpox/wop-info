@@ -36,7 +36,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/users', (req, res) => {
-    res.send(numClients);
+    res.json(numClients);
 });
 
 server.listen(process.env.PORT, function() {
