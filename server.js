@@ -1,40 +1,44 @@
-require("dotenv").config();
-const express = require("express");
+require('dotenv').config();
+const express = require('express');
 const app = express();
-var server = require("http").Server(app);
-const io = require("socket.io")(server);
-const ServerInfoCache = require("./cache");
+var server = require('http').Server(app);
+const io = require('socket.io')(server);
+const ServerInfoCache = require('./cache');
 
 const cache = new ServerInfoCache(5000);
 
 let numClients = 0;
 
-cache.on("updated", serverInfo => {
-  io.sockets.emit("updated", serverInfo);
+cache.on('updated', serverInfo => {
+    io.sockets.emit('updated', serverInfo);
 });
 
-io.on("connection", socket => {
-  console.log("a user connected");
+io.on('connection', socket => {
+    console.log('a user connected');
 
-  socket.emit("updated", cache.getServerInfo());
+    socket.emit('updated', cache.getServerInfo());
 
-  numClients++;
+    numClients++;
 
-  cache.startUpdating();
+    cache.startUpdating();
 
-  socket.on("disconnect", () => {
-    console.log("a user disconnected");
-    numClients--;
+    socket.on('disconnect', () => {
+        console.log('a user disconnected');
+        numClients--;
 
-    if (!numClients) cache.stopUpdating();
-  });
+        if (!numClients) cache.stopUpdating();
+    });
 });
 
 // respond with "hello world" when a GET request is made to the homepage
-app.get("/", (req, res) => {
-  res.json(cache.getServerInfo());
+app.get('/', (req, res) => {
+    res.json(cache.getServerInfo());
+});
+
+app.get('/users', (req, res) => {
+    res.send(numClients);
 });
 
 server.listen(process.env.PORT, function() {
-  console.log(`Example app listening on port ${process.env.PORT}!`);
+    console.log(`Example app listening on port ${process.env.PORT}!`);
 });
