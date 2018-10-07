@@ -9,7 +9,7 @@ const cache = new ServerInfoCache(5000);
 
 let numClients = 0;
 
-let addresses = {};
+let addresses = [];
 
 cache.on('updated', serverInfo => {
     io.sockets.emit('updated', serverInfo);
@@ -20,17 +20,20 @@ io.on('connection', socket => {
 
     socket.emit('updated', cache.getServerInfo());
 
-    const address = socket.handshake.address;
+    const address = socket.request.connection.remoteAddress;
 
     numClients++;
-    addresses[address.address] = address;
+
+    addresses.push(address);
 
     cache.startUpdating();
 
     socket.on('disconnect', () => {
         console.log('a user disconnected');
         numClients--;
-        delete addresses[address.address];
+
+        const index = addresses.indexOf(address);
+        addresses.splice(index, 1);
 
         if (!numClients) cache.stopUpdating();
     });
