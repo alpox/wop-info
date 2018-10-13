@@ -176,8 +176,12 @@ class Master {
   async getServers() {
     const client = new Client(this.url, this.port, 5000);
 
+    const requestString = this.protocol === 71
+      ? `getservers WorldofPadman ${this.protocol} empty`
+      : `getservers ${this.protocol} empty full`
+
     let responseBuffer = await client.request(
-      `getservers WorldofPadman ${this.protocol} empty`,
+      requestString,
       true
     );
 

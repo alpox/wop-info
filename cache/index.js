@@ -35,9 +35,14 @@ class ServerInfoCache extends EventEmitter {
 
     async update() {
         try {
+            const info16 = (await this.getAllInfo(this.master16))
+                .map(this.addVersion("1.6"));
+            const info12 = (await this.getAllInfo(this.master12))
+                .map(this.addVersion("1.2"));
+
             const allServerInfoPromises = [
-                ...(await this.getAllInfo(this.master16)).map(this.addVersion("1.6")),
-                ...(await this.getAllInfo(this.master12)).map(this.addVersion("1.2"))
+                ...info16,
+                ...info12
             ];
 
             this.serverInfo = await Promise.all(allServerInfoPromises);
