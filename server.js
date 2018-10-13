@@ -51,6 +51,6 @@ app.get('/users', (req, res) => {
     });
 });
 
-server.listen(process.env.PORT, function() {
-    console.log(`Example app listening on port ${process.env.PORT}!`);
+server.listen(process.env.PORT || 8080, function() {
+    console.log(`Example app listening on port ${process.env.PORT || 8080}!`);
 });

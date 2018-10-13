@@ -7,26 +7,33 @@ class ServerInfoCache extends EventEmitter {
 
         this.serverInfo = [];
         this.updateInterval = updateInterval;
-        this.master = new Master();
+        this.master16 = new Master();
+        this.master12 = new Master('tjps.eu', 68);
 
         this.update();
     }
 
-    async getAllInfo(address, port) {
-        const status = await this.master.getServerStatus(address, port);
-        const info = await this.master.getServerInfo(address, port);
-        return { ...status, ...info };
+    async requestServerInfo(master, address, port) {
+        const status = await master.getServerStatus(address, port);
+        const info = await master.getServerInfo(address, port);
+        return { ...status, ...info, master: master.url };
+    }
+
+    async getAllInfo(master) {
+        const servers = await master.getServers();
+        return servers.map(({ address, port }) =>
+            this.requestServerInfo(master, address, port)
+        );
     }
 
     async update() {
         try {
-            const servers = await this.master.getServers();
+            const allServerInfoPromises = [
+                ...await this.getAllInfo(this.master16),
+                ...await this.getAllInfo(this.master12)
+            ];
 
-            const promises = servers.map(({ address, port }) =>
-                this.getAllInfo(address, port)
-            );
-
-            this.serverInfo = await Promise.all(promises);
+            this.serverInfo = await Promise.all(allServerInfoPromises);
 
             this.emit('updated', this.serverInfo);
 

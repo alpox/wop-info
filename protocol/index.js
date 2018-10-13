@@ -133,9 +133,10 @@ class Client {
 }
 
 class Master {
-  constructor(url = "master.worldofpadman.com", port = 27955) {
+  constructor(url = "master.worldofpadman.com", protocol = 71, port = 27955) {
     this.url = url;
     this.port = port;
+    this.protocol = protocol;
   }
 
   async getServerInfo(address, port) {
@@ -172,28 +173,11 @@ class Master {
     );
   }
 
-  async getChallenge(address, port) {
-    const client = new Client(address, port, 5000);
-
-    const responseBuffer = await client.request("getstatus xx x");
-
-    const info = responseBuffer.toString("ascii");
-
-    return utils.reduce2(
-      info.split("\\"),
-      (acc, [key, value]) => ({
-        ...acc,
-        [key]: value
-      }),
-      {}
-    );
-  }
-
   async getServers() {
     const client = new Client(this.url, this.port, 5000);
 
     let responseBuffer = await client.request(
-      "getservers WorldofPadman 71 empty",
+      `getservers WorldofPadman ${this.protocol} empty`,
       true
     );
 
