@@ -8,7 +8,7 @@ class ServerInfoCache extends EventEmitter {
         this.serverInfo = [];
         this.updateInterval = updateInterval;
         this.master16 = new Master();
-        this.master12 = new Master('tjps.eu', 68);
+        this.master12 = new Master('master.worldofpadman.com', 68);
 
         this.update();
     }
