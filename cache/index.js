@@ -14,16 +14,24 @@ class ServerInfoCache extends EventEmitter {
     }
 
     async requestServerInfo(master, address, port) {
-        const status = await master.getServerStatus(address, port);
-        const info = await master.getServerInfo(address, port);
-        return { ...status, ...info, master: master.url };
+        try {
+            const status = await master.getServerStatus(address, port);
+            const info = await master.getServerInfo(address, port);
+            return { ...status, ...info, master: master.url };
+        } catch(e) {
+            console.error(`Server ${address}:${port} did not respond. Skipping server information for this server.`);
+            return null;
+        }
     }
 
     async getAllInfo(master) {
         const servers = await master.getServers();
-        return servers.map(({ address, port }) =>
+        const allInfo = await Promise.all(servers.map(({ address, port }) =>
             this.requestServerInfo(master, address, port)
-        );
+        ))
+
+        // Remove server data with no response
+        return allInfo.filter(info => info);
     }
 
     addVersion(version) {
